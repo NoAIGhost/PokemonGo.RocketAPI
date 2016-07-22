@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{71B7FC1E-FF84-4D77-9FA1-9E973D2F159E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>S2Geometry</RootNamespace>
+    <AssemblyName>S2Geometry.Portable</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="DataStructures\IMultiMap.cs" />
+    <Compile Include="DataStructures\MultiMap.cs" />
+    <Compile Include="DataStructures\MultiMapEnumerator.cs" />
+    <Compile Include="DataStructures\PriorityQueue.cs" />
+    <Compile Include="DataStructures\SortedMultiMapEnumerator.cs" />
+    <Compile Include="FpUtils.cs" />
+    <Compile Include="IS2Region.cs" />
+    <Compile Include="Preconditions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="R1Interval.cs" />
+    <Compile Include="R2Vector.cs" />
+    <Compile Include="S1Angle.cs" />
+    <Compile Include="S1Interval.cs" />
+    <Compile Include="S2.cs" />
+    <Compile Include="S2AreaCentroid.cs" />
+    <Compile Include="S2Cap.cs" />
+    <Compile Include="S2Cell.cs" />
+    <Compile Include="S2CellId.cs" />
+    <Compile Include="S2CellUnion.cs" />
+    <Compile Include="S2Edge.cs" />
+    <Compile Include="S2EdgeIndex.cs" />
+    <Compile Include="S2EdgeUtil.cs" />
+    <Compile Include="S2LatLng.cs" />
+    <Compile Include="S2LatLngRect.cs" />
+    <Compile Include="S2Loop.cs" />
+    <Compile Include="S2Point.cs" />
+    <Compile Include="S2Polygon.cs" />
+    <Compile Include="S2PolygonBuilder.cs" />
+    <Compile Include="S2Polyline.cs" />
+    <Compile Include="S2Projections.cs" />
+    <Compile Include="S2RegionCoverer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="C5, Version=2.4.5947.17249, Culture=neutral, PublicKeyToken=282361b99ded7e8e, processorArchitecture=MSIL">
+      <HintPath>..\packages\C5.2.4.5947.17249\lib\portable-net40+sl50+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\C5.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
