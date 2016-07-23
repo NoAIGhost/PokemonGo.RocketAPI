@@ -4,6 +4,7 @@ using PokemonGo.RocketAPI.Enums;
 using PokemonGo.RocketAPI.Exceptions;
 using PokemonGo.RocketAPI.GeneratedCode;
 using PokemonGo.RocketAPI.Helpers;
+using PokemonGo.RocketAPI.Login;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -39,6 +40,7 @@ namespace PokemonGo.RocketAPI
 
         #region Public Properties
         public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
         public AuthType AuthType { get; set; }
         #endregion
 
@@ -46,6 +48,8 @@ namespace PokemonGo.RocketAPI
         public double CurrentLat { get; private set; }
         public double CurrentLng { get; private set; }
         public double CurrentAlt { get; private set; }
+
+        public TokenHolder Tokens { get; private set; }
 
         public string ApiUrl { get; private set; } = "";
         public Request.Types.UnknownAuth UnknownAuth { get; private set; }
@@ -58,6 +62,45 @@ namespace PokemonGo.RocketAPI
         #endregion
 
         #region Public methods
+        /// <summary>
+        /// Used for generic login
+        /// </summary>
+        /// <param name="args">The attributes used for login. For Google login, none are required. For Play Store and PTC login, first item of array is email/username, second is password</param>
+        /// <returns></returns>
+        public async Task Login(AuthType authType, params string[] args)
+        {
+            ILoginProvider provider;
+            switch (authType)
+            {
+                case AuthType.Google:
+                    if (args.Length != 2)
+                    {
+                        provider = new GoogleLogin();
+                        // TODO: Set up provider properties
+                    }
+                    else
+                    {
+                        provider = new PlayServicesLogin();
+                        // TODO: Set up provider properties
+                    }
+                    break;
+                case AuthType.Ptc:
+                    provider = new PtcLogin();
+                    // TODO: Set up provider properties
+                    break;
+                default:
+                    provider = null;
+                    break;
+            }
+
+            if(provider != null)
+            {
+                Tokens = await provider.Authorize();
+                AccessToken = Tokens.AccessToken;
+                RefreshToken = Tokens.RefreshToken;
+            }
+        }
+
         public async Task SetServer()
         {
             var serverRequest = RequestBuilder.GetInitialRequest(AccessToken, AuthType, CurrentLat, CurrentLng, CurrentAlt,

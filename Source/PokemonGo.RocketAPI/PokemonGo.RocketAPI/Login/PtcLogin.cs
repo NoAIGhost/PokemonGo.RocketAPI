@@ -13,6 +13,23 @@ namespace PokemonGo.RocketAPI.Login
 {
     public class PtcLogin : ILoginProvider
     {
+        public string Username { get; set; }
+        public string Password { get; set; }
+
+
+        public async Task<TokenHolder> Authorize()
+        {
+            if (string.IsNullOrEmpty(Username))
+                throw new Exception("No username");
+
+            if (string.IsNullOrEmpty(Password))
+                throw new Exception("No password");
+
+            TokenHolder holder = new TokenHolder();
+            holder.AccessToken = await GetAccessToken(Username, Password);
+            return holder;
+        }
+
         public static async Task<string> GetAccessToken(string username, string password)
         {
             var handler = new HttpClientHandler()

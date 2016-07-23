@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using PokemonGo.RocketAPI.Helpers;
 using PokemonGo.RocketAPI.Logging;
@@ -12,20 +13,37 @@ namespace PokemonGo.RocketAPI.Login
         private const string ClientId = "848232511240-73ri3t7plvk96pj4f85uj8otdat2alem.apps.googleusercontent.com";
         private const string ClientSecret = "NCjF1TLi2CcY6t5mt0ZveuL7";
 
-        public static async Task<TokenResponseModel> GetAccessToken(DeviceCodeModel deviceCode)
-        {
-            //Poll until user submitted code..
-            TokenResponseModel tokenResponse;
-            do
-            {
-                await Task.Delay(2000);
-                tokenResponse = await PollSubmittedToken(deviceCode.device_code);
-            } while (tokenResponse.access_token == null || tokenResponse.refresh_token == null);
+        public DeviceCodeModel DeviceCode { get; set; }
+        public string RefreshToken { get; set; }
 
-            return tokenResponse;
+        public async Task<TokenHolder> Authorize()
+        {
+            TokenResponseModel response = null;
+
+            if (DeviceCode == null && string.IsNullOrEmpty(RefreshToken))
+            {
+                var deviceResponse = await GetDeviceCode();
+                DeviceCode = deviceResponse;
+            }
+
+            if (!string.IsNullOrEmpty(RefreshToken))
+            {
+                response = await GetAccessToken(RefreshToken);
+            }
+            else if (DeviceCode != null)
+            {
+                response = await GetAccessToken(DeviceCode);
+            }
+            else
+            {
+                throw new Exception("No DeviceCode or RefreshToken were given!");
+            }
+            
+            return new TokenHolder { AccessToken = response.access_token, RefreshToken = response.refresh_token, IdToken = response.id_token, TokenType = response.token_type, ExpiresIn = response.expires_in };
         }
 
-        public static async Task<DeviceCodeModel> GetDeviceCode()
+        #region Static methods
+        private static async Task<DeviceCodeModel> GetDeviceCode()
         {
             var deviceCode = await HttpClientHelper.PostFormEncodedAsync<DeviceCodeModel>(OauthEndpoint,
                 new KeyValuePair<string, string>("client_id", ClientId),
@@ -56,6 +74,19 @@ namespace PokemonGo.RocketAPI.Login
                 new KeyValuePair<string, string>("scope", "openid email https://www.googleapis.com/auth/userinfo.email"));
         }
 
+        private static async Task<TokenResponseModel> GetAccessToken(DeviceCodeModel deviceCode)
+        {
+            //Poll until user submitted code..
+            TokenResponseModel tokenResponse;
+            do
+            {
+                await Task.Delay(2000);
+                tokenResponse = await PollSubmittedToken(deviceCode.device_code);
+            } while (tokenResponse.access_token == null || tokenResponse.refresh_token == null);
+
+            return tokenResponse;
+        }
+        #endregion
 
         internal class ErrorResponseModel
         {
@@ -72,7 +103,6 @@ namespace PokemonGo.RocketAPI.Login
             public string id_token { get; set; }
         }
 
-
         public class DeviceCodeModel
         {
             public string verification_url { get; set; }
@@ -81,6 +111,5 @@ namespace PokemonGo.RocketAPI.Login
             public string device_code { get; set; }
             public string user_code { get; set; }
         }
-
     }
 }

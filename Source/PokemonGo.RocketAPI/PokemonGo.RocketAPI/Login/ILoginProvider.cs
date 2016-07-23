@@ -8,6 +8,6 @@ namespace PokemonGo.RocketAPI.Login
 {
     public interface ILoginProvider
     {
-        // TODO: Create a generic LoginProvider layout
+        Task<TokenHolder> Authorize();
     }
 }
