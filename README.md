@@ -23,17 +23,17 @@ However this move won't be supported by the VarintByteConverter library used by 
 
 The following TODO points are in code:
 
- [ ] Fix Varint to byte[] conversion (VarintByteConverter dependency)
- [ ] Implement all Client calls (currently only two are implemented)
- [ ] Refactor Login providers with generic interface
- [ ] Implement GPSOAuth login provider for easier Google login
+ - [ ] Fix Varint to byte[] conversion (VarintByteConverter dependency)
+ - [ ] Implement all Client calls (currently only two are implemented)
+ - [ ] Refactor Login providers with generic interface
+ - [ ] Implement GPSOAuth login provider for easier Google login
  
 ## Wanted help
 
 While all help is accepted, I would like to point out that current focus is on making the API as functional as possible. For this we need people with the following expertise:
 
- [ ] Protobuf experience
- [ ] Unity reverse experience
+ - [ ] Protobuf experience
+ - [ ] Unity reverse experience
  
 Main focus is getting the most out of the proto files we have currently. This also means that all new releases of the game have to be checked if the protocol changed, and these should be added to the code base.
 
